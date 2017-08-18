@@ -1,5 +1,7 @@
-data/*
 mysqlauth.sh
+buckets.sh
+config
+data/*
 !data/graphs/
 !data/plot.gnu
 !data/graph.sh
