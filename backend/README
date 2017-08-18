@@ -1,0 +1,52 @@
+Subdirectories:
+	shared - files put into the /shared directory on the cluster
+	patches - patch files applied to ompi during compilation
+		  only files ending in .patch are applied
+
+preinstall.sh:
+	> Disables scheduling on second hyperthread on each core
+	> Sets ulimit -c unlimited
+
+ssh_config:
+	> Custom ssh configuration for cluster
+	> Turns off key checking
+	> Sets known hosts file to /dev/null to prevent key mismatches
+	  We never determined the cause of mismatching keys, but this works
+	  around the issue
+
+setup.sh:
+	> Final script run in the setup process by CfnCluster
+	> Installs needed software, compile ompi, pulls files from s3,
+	  inserts metadata to database, and creates initial slurm job (runcluster.sh)
+
+shared/runcluster.sh:
+	> Waits for all compute nodes to be available
+	> Creates all slurm jobs
+	> This is done because CfnCluster provides a dummy cluster with
+	  infinite cores, but only one node. This means you can submit a job
+	  which requires as many cores as you want, but can't specify the number
+	  of nodes you want. To specify the number of nodes you want, wait until
+	  all of the nodes are up and then launch the slurm jobs. Waiting is
+	  done by creating the initial slurm job to require np*ppn cores,
+	  so it won't run until all nodes are up.
+
+shared/runtest.sh:
+	> mpiruns the test file and uploads the amount of time taken to the database
+
+shared/memtest.sh:
+	> mpiruns the test file and pipes the output into memdata.py instead of
+	  directly uploading to the database
+
+shared/memdata.py:
+	> Parses the output of mpi_memprobe and uploads it to the database
+
+shared/shutdown.sh:
+	> Uploads slurm and CfnCluster logs to S3
+	> Deletes Cloud Formation stack, shutting down cluster
+
+shared/crontab.txt:
+	> User's crontab, checks every minute if all slurm jobs are complete.
+	  If so, runs shutdown.sh
+
+shared/tests/:
+	> Location of openmpi tests (mpi_no_op, ring, mpi_memprobe) and Makefile

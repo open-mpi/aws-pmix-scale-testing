@@ -1,0 +1,6 @@
+data/*
+mysqlauth.sh
+!data/graphs/
+!data/plot.gnu
+!data/graph.sh
+!data/README

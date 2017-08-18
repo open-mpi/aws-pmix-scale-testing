@@ -1,0 +1,3 @@
+name="single"
+desc="Single server, with a varying nproc"
+title="commit $hash, branch $branch, single server memprobe"
