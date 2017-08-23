@@ -21,14 +21,14 @@ choose_graphs()
 
     #for each inf print the name and description
     for num in ${!options[@]}; do
-        source ${options[num]}
-        echo $num $name - $desc
+	source ${options[num]}
+	echo $num $name - $desc
     done
 
     #read user input and return array of graphs to make
     read -a graph_nums
     for graph in graph_nums; do
-        graphs+=${options[$graph]}
+	graphs+=${options[$graph]}
     done
 }
 
@@ -39,26 +39,23 @@ main()
     run=$(choose_run)
     #create directory
     if [ ! -d $run ]; then
-        mkdir $run
+	mkdir $run
     fi
     #list options for graphing
     choose_graphs
     echo ${graphs[@]}
     for graph in ${graphs[@]}; do
-        #get metadata
-        branch=$(bash ../query_db.sh "SELECT branch FROM metadata WHERE runnum=$run" "-NB")
-        hash=$(bash ../query_db.sh "SELECT hash FROM metadata WHERE runnum=$run" "-NB")
-        source $graph
-        #get data from db
-        $(bash ../query_db.sh "$(cat graphs/$name.sql)" > $run/$name.raw)
-        #write graph
-        gnuplot -e "plottitle='$title'" -e "datapoints='$run/$name.raw'" -e "out='$run/$name.pdf'" plot.gnu
+	#get metadata
+	branch=$(bash ../query_db.sh "SELECT branch FROM metadata WHERE runnum=$run" "-NB")
+	hash=$(bash ../query_db.sh "SELECT hash FROM metadata WHERE runnum=$run" "-NB")
+	source $graph
+	#get data from db
+	$(bash ../query_db.sh "$(cat graphs/$name.sql)" > $run/$name.raw)
+	#write graph
+	gnuplot -e "plottitle='$title'" -e "datapoints='$run/$name.raw'" -e "out='$run/$name.pdf'" plot.gnu
     done
 
 }
 
 #entry point
 main
-
-
-

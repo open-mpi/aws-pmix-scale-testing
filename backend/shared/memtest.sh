@@ -12,13 +12,13 @@ ompi_version=$(echo $(/opt/openmpi/bin/ompi_info --parseable | grep ompi:version
 #assemble hostlist based on openmpi version
 #for 1.X repeat the hostname for each slot
 #for 2.X+ <hostname>:<slots>
-for node in $nodes; do 
+for node in $nodes; do
     if [ "$ompi_version" -eq "1" ]; then
-        for i in $(seq 1 $ppn); do
-            nodelist=$nodelist$node","
-        done
+	for i in $(seq 1 $ppn); do
+	    nodelist=$nodelist$node","
+	done
     else
-        nodelist=$nodelist$node":"$ppn","
+	nodelist=$nodelist$node":"$ppn","
     fi
 done
 
@@ -30,4 +30,3 @@ cmd="/opt/openmpi/bin/mpirun -np $x --map-by node --host $nodelist /shared/test"
 eval $cmd |& /shared/memdata.py $runnum $rep $nnodes $ppn "$cmd"
 
 set +x
-
