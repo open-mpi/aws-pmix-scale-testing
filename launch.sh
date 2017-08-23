@@ -16,7 +16,7 @@ makeconfig()
     echo "max_queue_size=$(echo $line | cut -d' ' -f5)" >> config
 }
 
-#Launch cluster 
+#Launch cluster
 launch()
 {
     #remove --nowait to block when creating a cluster.
@@ -32,10 +32,10 @@ main()
     while IFS= read -r line
     do
 	#if line is not a comment start a cluster
-        if [[ $line != '#'* ]]; then
-            makeconfig "$line"
-            launch
-        fi
+	if [[ $line != '#'* ]]; then
+	    makeconfig "$line"
+	    launch
+	fi
     done < $readfile
 }
 

@@ -18,14 +18,14 @@ update()
 compile()
 {
     if [ "$1" = "git" ]; then
-        git clone https://github.com/open-mpi/ompi
-        cd ompi
-        ./autogen.pl
+	git clone https://github.com/open-mpi/ompi
+	cd ompi
+	./autogen.pl
     else
-        filename=$(basename $1)
-        wget "$1"
-        tar xf $filename
-        cd ${filename%.tar*}
+	filename=$(basename $1)
+	wget "$1"
+	tar xf $filename
+	cd ${filename%.tar*}
     fi
 
     #Get patchfiles from s3
@@ -52,7 +52,7 @@ upload()
     echo "uploaded"
 }
 
-#Pull tar of ompi build and unpack 
+#Pull tar of ompi build and unpack
 download()
 {
     aws s3 cp s3://$s3builds/ompi_latest.tar.gz ompi_latest.tar.gz
@@ -77,7 +77,7 @@ get_reqd_files()
 #Insert all metadata into metadata table
 insert_metadata()
 {
-    ompihash=$(ompi_info --parseable | awk "/ompi:version:repo:/" | awk -F'g' '{print $NF}') 
+    ompihash=$(ompi_info --parseable | awk "/ompi:version:repo:/" | awk -F'g' '{print $NF}')
     ompibranch=$(ompi_info --parseable | awk "/ompi:version:repo:/" | awk -F'-' '{print $1}' | awk -F':' '{print $NF}')
     numcores=$2
     testname=$3
@@ -118,7 +118,7 @@ create_cron()
 #Change core pattern to something readable
 fix_core()
 {
-    echo "core.%e-%t-%p" > /proc/sys/kernel/core_pattern 
+    echo "core.%e-%t-%p" > /proc/sys/kernel/core_pattern
 }
 
 #Create slurm jobs for timing tests
@@ -134,7 +134,7 @@ fix_core()
 #            lowproc=$((2**iteration-3))
 #
 #            midproc=$((2**iteration))
-#            
+#
 #            highproc=$((2**iteration+3))
 #
 #            set -x
@@ -205,44 +205,44 @@ main()
     source /opt/cfncluster/cfnconfig
     if [ $cfn_node_type = MasterServer ]; then
 	#compile ompi and add it to path&lib path
-        compile $method $hostcores
-        echo 'PATH=$PATH:/opt/openmpi/bin' >> /etc/bashrc
-        echo 'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/openmpi/lib' >> /etc/bashrc
+	compile $method $hostcores
+	echo 'PATH=$PATH:/opt/openmpi/bin' >> /etc/bashrc
+	echo 'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/openmpi/lib' >> /etc/bashrc
 
 	#Limit SBATCH to 1 minute before it kills
 	#Note that it will not kill -9, that occurs
 	#30 seconds later if it needs to
-        echo 'export SBATCH_TIMELIMIT=1' >> /etc/bashrc
+	echo 'export SBATCH_TIMELIMIT=1' >> /etc/bashrc
 
-        source /etc/bashrc
-        #echo $PATH
+	source /etc/bashrc
+	#echo $PATH
 
 	#upload compile tarball to s3 to be pulled by computefleet
-        upload
+	upload
 
 	#Pulled needed files from s3
-        get_reqd_files $testname
+	get_reqd_files $testname
 
 	#insert run metadata
-        insert_metadata $computenum $computetotal $testname
-        #create_cron
+	insert_metadata $computenum $computetotal $testname
+	#create_cron
 	#apply config patches
-        fix_ssh
-        fix_core
+	fix_ssh
+	fix_core
 
 	#create slurm jobs
-        #runcluster $computecores $computetotal
-        runcluster $computecores $computenum
+	#runcluster $computecores $computetotal
+	runcluster $computecores $computenum
     elif [ $cfn_node_type = ComputeFleet ]; then
 	#pull ompi build from s3
-        download
-        echo 'PATH=$PATH:/opt/openmpi/bin' >> /etc/bashrc
-        echo 'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/openmpi/lib' >> /etc/bashrc
-        echo 'export SBATCH_TIMELIMIT=1' >> /etc/bashrc
-        source /etc/bashrc
-        #echo $PATH
+	download
+	echo 'PATH=$PATH:/opt/openmpi/bin' >> /etc/bashrc
+	echo 'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/openmpi/lib' >> /etc/bashrc
+	echo 'export SBATCH_TIMELIMIT=1' >> /etc/bashrc
+	source /etc/bashrc
+	#echo $PATH
 	#apply ssh patch
-        fix_ssh
+	fix_ssh
     fi
     echo "All done!"
 }

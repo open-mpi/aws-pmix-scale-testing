@@ -11,13 +11,13 @@ nodes=$(scontrol show hostname ${SLURM_JOB_NODELIST})
 #assemble hostlist based on openmpi version
 #for 1.X repeat the hostname for each slot
 #for 2.X+ <hostname>:<slots>
-for node in $nodes; do 
+for node in $nodes; do
     if [ "$ompi_version" -eq "1" ]; then
-        for i in $(seq 1 $ncpu); do
-            nodelist=$nodelist$node","
-        done
+	for i in $(seq 1 $ncpu); do
+	    nodelist=$nodelist$node","
+	done
     else
-        nodelist=$nodelist$node":"$ncpu","
+	nodelist=$nodelist$node":"$ncpu","
     fi
 done
 
@@ -34,7 +34,7 @@ after=$(awk "/^now/ {print \$3; exit}" /proc/timer_list)
 
 #throw away first result by setting runtime to -1
 numvals="$(bash /shared/query_db.sh "SELECT count(*) FROM data WHERE runnum=$runnum AND x=$x" "-N")"
-if [ $numvals -gt 0 ] ; then 
+if [ $numvals -gt 0 ] ; then
     runtime=$((($after-$before)/1000000))
 else
     runtime=-1
