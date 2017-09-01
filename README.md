@@ -13,6 +13,8 @@
 1. Change the name of the private key from CfnClusterKey to `<your_key>`
    in `./config`
 1. Move `mysqlauth.sh.template` to `mysqlauth.sh` and fill in database info
+1. Move `buckets.sh.template` to `buckets.sh` and fill in s3 info
+1. symlink mysqlauth.sh and buckets.sh to /backend/shared
 
 # Usage
 
@@ -39,6 +41,15 @@ Usage: `./query_db.sh "<query>" "<args>"`
 * All values must be in quotes to ensure proper parsing
   in `memdata.py` (in `./backend/shared`)
 
+# buckets.sh
+
+* File containing names of s3 buckets
+* backend - bucket where files in /backend are stored
+* builds - bucket where builds of openmpi are stored (for purposes of reproducing errors)
+* logs - bucket where log files from /var/log and $HOME on the cluster are stored (debugging)
+* All values must be in quotes to ensure proper parsing
+  in `memdata.py` (in `./backend/shared`)
+  
 # config:
 
 CfnCluster configuration file.
