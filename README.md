@@ -53,6 +53,8 @@ Usage: `./query_db.sh "<query>" "<args>"`
 # config:
 
 CfnCluster configuration file.
+Look over the documentation, it is extremely helpful:
+http://cfncluster.readthedocs.io/en/latest/
 
 # postinstallargs.cfg
 
