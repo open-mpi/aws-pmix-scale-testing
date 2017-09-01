@@ -3,7 +3,11 @@
 #Modify config file
 makeconfig()
 {
-    line=$1
+    #Add bucket information to end of $line
+    source buckets.sh
+    
+    line="$1 $backend $builds $logs"
+    echo $line
     #remove previous run's post_install_args
     sed -i '/^post_install_args/d' config
     #remove previous queue sizes
