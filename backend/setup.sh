@@ -67,6 +67,7 @@ get_reqd_files()
 {
     testname=$1
     aws s3 cp --recursive s3://$s3backend/V2/shared /shared
+    chmod +x /shared/shutdown.sh
     make -C /shared/tests/
     ln -s $testname /shared/test
     aws s3 cp s3://$s3backend/V2/credentials /home/ec2-user/.aws/credentials

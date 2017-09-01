@@ -21,5 +21,4 @@ done
 echo "creating crontab"
 echo "runnum=$runnum" > /shared/cronvars
 crontab /shared/crontab.txt
-chmod +x /shared/shutdown.sh
 echo "done"
