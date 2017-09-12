@@ -4,6 +4,7 @@
 * `awscli` - for uploading files to S3
   * Comes as part of `CfnCluster` from pip
 * AWS Credentials
+* jq - for json parsing in connect.sh
 
 # Initial Setup
 
@@ -73,6 +74,10 @@ http://cfncluster.readthedocs.io/en/latest/
 
 Used to launch a cluster using the information found in
 `postinstallargs.cfg`
+
+# connect.sh
+Used to connect via ssh to the head node of a selected cluster
+Usage: `./connect.sh <path-to-keyfile>`
 
 # Subdirectories
 
