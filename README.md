@@ -75,6 +75,9 @@ http://cfncluster.readthedocs.io/en/latest/
 Used to launch a cluster using the information found in
 `postinstallargs.cfg`
 
+Usage: `./launch [cluster-name-base]`  
+If the base name is supplied, each cluster will be named "<cluster-name-base>_<count>", where <count> is the number of the cluster being launched. This number will start at zero and increment by one with each line in postinstallargs.cfg.
+
 # connect.sh
 Used to connect via ssh to the head node of a selected cluster
 Usage: `./connect.sh <path-to-keyfile>`
