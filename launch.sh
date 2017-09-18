@@ -44,7 +44,7 @@ main()
     do
 	#if line is not a comment start a cluster
 	if [[ $line != '#'* ]]; then
-	    cluster_name=$base_name"_"$((count++))
+	    cluster_name=$base_name"-"$((count++))
 	    makeconfig "$line"
 	    launch
    	    echo $cluster_name
