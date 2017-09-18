@@ -35,6 +35,10 @@ connect()
 {
     # Get the IP of the selected cluster
     addr=$(echo $info | jq -r .[$selection].IP)
+    if [ "$addr" = "null" ]; then
+	echo "Cluster head node does not have a public IP yet, wait a few minutes then try again"
+	exit 1
+    fi
     ssh -i $keyfile ec2-user@$addr
 }
 
