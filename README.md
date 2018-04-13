@@ -12,7 +12,7 @@
    CfnCluster config file (`./config`)
 1. Create and download your private key from AWS
 1. Create new IAM role:
-   1. Attach policies in /policies
+   1. Attach policies in `/policies`
    1. Copy policies from http://cfncluster.readthedocs.io/en/latest/iam.html
 1. Change the name of the private key from CfnClusterKey to `<your_key>`
    in `./config`
